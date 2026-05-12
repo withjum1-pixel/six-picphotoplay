@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>📸 재미있는 사진 찍기</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Round+Square:wght@400;700;800&display=swap');
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+:root{--pk:#FF6B9D;--yw:#FFD93D;--gn:#6BCB77;--bl:#4D96FF;--og:#FF9F43;--pp:#C77DFF;--rd:#FF4757;--bg:#FFF9F0;}
+body{font-family:'Nanum Round Square',sans-serif;background:var(--bg);color:#333;max-width:480px;margin:0 auto;min-height:100vh;overflow-x:hidden;}
+
+.pg{display:none;min-height:100vh;padding-bottom:30px;}
+.pg.on{display:block;animation:fu .3s ease;}
+@keyframes fu{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes bnc{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes flt{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+@keyframes pp{0%{transform:scale(0);opacity:0}80%{transform:scale(1.08)}100%{transform:scale(1);opacity:1}}
+@keyframes rb{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+@keyframes cd{0%{transform:scale(2.5);opacity:0}30%{opacity:1;transform:scale(1)}85%{opacity:1}100%{opacity:0;transform:scale(.3)}}
+
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;border:none;border-radius:1rem;padding:15px 20px;font-size:16px;font-weight:800;cursor:pointer;font-family:inherit;width:100%;transition:transform .15s;}
+.btn:active{transform:scale(.97);}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+.btn-gn{background:linear-gradient(135deg,var(--gn),#26de81);color:#fff;box-shadow:0 6px 20px rgba(107,203,119,.35);}
+.btn-bl{background:linear-gradient(135deg,var(--bl),var(--pp));color:#fff;box-shadow:0 6px 20px rgba(77,150,255,.35);}
+.btn-yw{background:linear-gradient(135deg,var(--yw),var(--og));color:#fff;box-shadow:0 6px 20px rgba(255,159,67,.35);}
+.btn-rd{background:linear-gradient(135deg,var(--rd),var(--og));color:#fff;}
+.btn-gy{background:#eee;color:#666;}
+.btn-sm{padding:12px 16px;font-size:14px;width:auto;}
+.btn-pp{background:linear-gradient(135deg,var(--pp),var(--pk));color:#fff;box-shadow:0 6px 20px rgba(199,125,255,.35);}
+
+.nav{background:linear-gradient(135deg,var(--pk),var(--pp));color:#fff;padding:13px 14px;display:flex;align-items:center;gap:8px;position:sticky;top:0;z-index:100;box-shadow:0 4px 15px rgba(255,107,157,.35);}
+.nb{background:rgba(255,255,255,.25);border:none;border-radius:.75rem;padding:9px 13px;color:#fff;font-size:14px;font-weight:800;cursor:pointer;display:flex;align-items:center;gap:5px;white-space:nowrap;flex-shrink:0;}
+.nav h2{font-size:15px;font-weight:800;flex:1;text-align:center;}
+
+.hero-safety{background:linear-gradient(135deg,var(--og),var(--pk));padding:32px 20px 36px;text-align:center;color:#fff;position:relative;overflow:hidden;}
+.hero-safety::after,.hero-home::after,.hero-sub::after{content:'';position:absolute;bottom:-24px;left:0;right:0;height:48px;background:var(--bg);border-radius:50% 50% 0 0/100% 100% 0 0;}
+.hero-safety .em{font-size:64px;display:block;animation:bnc 2s infinite;margin-bottom:10px;}
+.hero-home{background:linear-gradient(135deg,#FF6B9D,#C77DFF,#4D96FF);background-size:200% 200%;animation:rb 6s ease infinite;padding:36px 20px 40px;text-align:center;color:#fff;position:relative;overflow:hidden;}
+.hero-home .cam{font-size:62px;display:block;animation:flt 3s ease-in-out infinite;margin-bottom:12px;}
+.hero-sub{padding:22px 20px 28px;text-align:center;color:#fff;position:relative;overflow:hidden;}
+.hero-sub h1{font-size:20px;font-weight:800;margin-bottom:4px;}
+.hero-sub p{font-size:13px;opacity:.92;}
+
+.si{background:#fff;border-radius:1.2rem;padding:14px 16px;margin-bottom:10px;box-shadow:0 4px 12px rgba(0,0,0,.07);display:flex;gap:12px;}
+.si-ic{font-size:24px;flex-shrink:0;margin-top:2px;}
+.si-lb{font-size:15px;font-weight:800;margin-bottom:3px;}
+.si-ds{font-size:13px;color:#666;line-height:1.65;}
+.warn{background:linear-gradient(135deg,#FF4757,#FF6B9D);border-radius:1.2rem;padding:16px;margin:0 16px 16px;color:#fff;box-shadow:0 6px 20px rgba(255,71,87,.35);animation:shk .6s ease;}
+.warn h3{font-size:16px;font-weight:800;margin-bottom:8px;}
+.warn p{font-size:13px;line-height:2.0;}
+.ag-row{display:flex;align-items:center;gap:10px;margin-bottom:14px;cursor:pointer;}
+.ag-row input{width:24px;height:24px;accent-color:var(--gn);cursor:pointer;}
+.ag-row label{font-size:14px;font-weight:700;cursor:pointer;}
+
+.mgrid{padding:36px 16px 0;display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+.mc{background:#fff;border-radius:1.2rem;padding:20px 8px;text-align:center;box-shadow:0 6px 20px rgba(0,0,0,.09);cursor:pointer;border:3px solid transparent;transition:transform .15s;animation:pp .4s ease both;}
+.mc:active{transform:scale(.95);}
+.mc .me{font-size:34px;display:block;animation:flt 3s ease-in-out infinite;margin-bottom:8px;}
+.mc h3{font-size:12px;font-weight:800;line-height:1.5;}
+.mc.c1{border-color:var(--yw);}
+.mc.c2{border-color:var(--pk);}
+.mc.c3{border-color:var(--bl);}
+
+.pi{background:#fff;border-radius:1.2rem;margin-bottom:12px;box-shadow:0 4px 16px rgba(0,0,0,.08);overflow:hidden;}
+.pi-hd{padding:14px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;}
+.pi-em{font-size:32px;}
+.pi-inf h3{font-size:15px;font-weight:800;}
+.pi-inf p{font-size:12px;color:#888;margin-top:2px;}
+.pi-bd{margin-left:auto;padding:5px 12px;border-radius:.75rem;font-size:12px;font-weight:800;flex-shrink:0;}
+.pi-tip{padding:10px 16px;font-size:13px;color:#555;line-height:1.7;border-top:1px dashed #eee;background:#FAFAFA;display:none;}
+.pi-btn{margin:0 16px 14px;width:calc(100% - 32px);padding:13px;border:none;border-radius:1rem;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit;color:#fff;display:flex;align-items:center;justify-content:center;gap:8px;}
+
+.mcard{background:#fff;border-radius:1.2rem;overflow:hidden;box-shadow:0 6px 20px rgba(0,0,0,.09);margin-bottom:16px;}
+.mhd{padding:14px 16px;display:flex;align-items:center;gap:10px;color:#fff;}
+.m1 .mhd{background:linear-gradient(135deg,#FFD93D,#FF9F43);}
+.m2 .mhd{background:linear-gradient(135deg,#6BCB77,#4D96FF);}
+.m3 .mhd{background:linear-gradient(135deg,#C77DFF,#FF6B9D);}
+.mbadge{background:rgba(255,255,255,.9);border-radius:.75rem;padding:4px 10px;font-size:12px;font-weight:800;color:#333;flex-shrink:0;}
+.mhd h3{font-size:15px;font-weight:800;flex:1;}
+.mbody{padding:14px;}
+.mdesc{font-size:14px;line-height:1.8;color:#555;margin-bottom:10px;}
+.mtip{background:#F8F9FA;border-radius:1rem;padding:10px 14px;font-size:13px;color:#666;line-height:1.8;margin-bottom:10px;}
+.plan{border-radius:1rem;padding:14px;margin-bottom:12px;border:2px solid var(--yw);background:#FFFBF0;}
+.plan.b{border-color:#B5D4F4;background:#F0F8FF;}
+.plan.c{border-color:#DDB5F4;background:#F8F0FF;}
+.plan h4{font-size:14px;font-weight:800;color:var(--og);margin-bottom:10px;display:flex;align-items:center;gap:6px;}
+.plan.b h4{color:var(--bl);}
+.plan.c h4{color:var(--pp);}
+.pf{margin-bottom:10px;}
+.pf label{display:block;font-size:12px;font-weight:800;color:#888;margin-bottom:4px;}
+.pf input,.pf textarea{width:100%;border:2px solid #E0E0E0;border-radius:.75rem;padding:10px 12px;font-size:14px;font-family:inherit;}
+.pf textarea{height:64px;resize:none;}
+.pf input:focus,.pf textarea:focus{outline:none;border-color:var(--gn);}
+
+/* 자유주제 예시 칩 */
+.theme-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;}
+.chip{background:linear-gradient(135deg,#F3E8FF,#E8F0FF);border:2px solid #DDB5F4;border-radius:2rem;padding:7px 14px;font-size:13px;font-weight:800;color:#7B2FBE;cursor:pointer;transition:all .15s;white-space:nowrap;}
+.chip:active,.chip.sel{background:linear-gradient(135deg,var(--pp),var(--pk));color:#fff;border-color:transparent;transform:scale(.97);}
+.chip-label{font-size:12px;font-weight:800;color:#888;margin-bottom:8px;}
+
+/* ══ 카메라 앱 스타일 ══ */
+#cam { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:#000; z-index:9999; flex-direction:column; }
+#cam.on { display:flex; }
+
+#cam-header { background:rgba(0,0,0,.82); padding:12px 14px; display:flex; align-items:center; justify-content:space-between; flex-shrink:0; z-index:10001; height: 64px; transition: all 0.3s ease; }
+#cam-body { flex:1; position:relative; overflow:hidden; background:#111; display:flex; align-items:center; justify-content:center; touch-action: none; }
+#cam-footer { background:rgba(0,0,0,.88); padding:14px 16px 36px; display:flex; align-items:center; justify-content:space-around; flex-shrink:0; z-index:10001; height: 120px; transition: all 0.3s ease; padding-bottom: env(safe-area-inset-bottom); }
+
+.cam-nb { background:rgba(255,255,255,.2); border:none; border-radius:.9rem; padding:9px 13px; color:#fff; font-size:14px; font-weight:800; cursor:pointer; font-family:inherit; display:flex; align-items:center; gap:6px; white-space:nowrap; transition: background 0.2s; }
+.cam-nb:active { background:rgba(255,255,255,.4); }
+.cam-title-txt { color:#fff; font-size:14px; font-weight:800; text-align:center; flex:1; margin: 0 10px; overflow: hidden; text-overflow: ellipsis; }
+
+.v-tag { position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; display:block; transform-origin:center center; transition: transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+.cam-grid-ov { position:absolute; top:0; left:0; right:0; bottom:0; pointer-events:none; z-index:1000; background-image:linear-gradient(rgba(255,255,255,.2) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.2) 1px,transparent 1px); background-size:33.33% 33.33%; opacity: 0.7; }
+
+.cd-ov { display:none; position:absolute; top:0; left:0; right:0; bottom:0; align-items:center; justify-content:center; background:rgba(0,0,0,0); z-index:5000; pointer-events:none; }
+.cd-ov.on { display:flex; }
+.cd-n { font-size:170px; font-weight:800; color:#fff; text-shadow:0 0 60px rgba(0,0,0,0.8); animation:cd 1s ease forwards; }
+
+.zoom-row { position:absolute; bottom:16px; left:50%; transform:translateX(-50%); display:flex; gap:6px; z-index:1000; background: rgba(0,0,0,0.3); padding: 4px; border-radius: 2rem; backdrop-filter: blur(4px); }
+.zb { background:transparent; color:#fff; border:none; border-radius:1.5rem; padding:8px 14px; font-size:14px; font-weight:800; cursor:pointer; font-family:inherit; transition: all 0.2s; }
+.zb.on { background:rgba(255,255,255,.93); color:#333; }
+
+.cam-btn-icon { width:62px; height:62px; border-radius:1.2rem; background:rgba(255,255,255,.2); border:2px solid rgba(255,255,255,.6); display:flex; align-items:center; justify-content:center; color:#fff; font-size:24px; cursor:pointer; overflow:hidden; position: relative; transition: transform 0.15s; }
+.cam-btn-icon:active { transform: scale(0.9); }
+.cam-btn-icon img { width:100%; height:100%; object-fit:cover; display:none; position: absolute; top:0; left:0; }
+
+.shutter { background:#fff; border:6px solid rgba(255,255,255,.4); border-radius:50%; width:80px; height:80px; cursor:pointer; font-size:32px; display:flex; align-items:center; justify-content:center; box-shadow:0 0 0 4px rgba(255,255,255,.2); transition:transform .1s; flex-shrink:0; color: #333; }
+.shutter:active { transform:scale(.9); }
+.shutter:disabled { opacity:.4; cursor:not-allowed; }
+
+@media (orientation: landscape) {
+  #cam { flex-direction: row; }
+  #cam-header { flex-direction: column; width: 80px; height: 100%; padding: 16px 0; padding-left: env(safe-area-inset-left); justify-content: space-evenly; gap: 10px; }
+  #cam-header .cam-title-txt { writing-mode: vertical-rl; text-orientation: mixed; letter-spacing: 2px; transform: rotate(180deg); flex: 0; }
+  #cam-header .cam-nb { flex-direction: column; writing-mode: vertical-rl; text-orientation: mixed; padding: 12px 8px; gap:8px; border-radius: 0.9rem; }
+  #cam-header .cam-nb i { transform: rotate(-90deg); margin: 0; }
+  #cam-footer { flex-direction: column; width: 110px; height: 100%; padding: 0; padding-right: env(safe-area-inset-right); justify-content: space-evenly; }
+  .zoom-row { bottom: 16px; left: auto; right: 16px; transform: none; flex-direction: column; }
+}
+
+#inp-wrap { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.72); z-index:100000; align-items: flex-start; justify-content:center; padding: 15px; overflow-y: auto; }
+#inp-wrap.on { display:flex; }
+#inp-sheet { background:#fff; border-radius:1.5rem; padding:20px; width:100%; max-width:400px; box-shadow: 0 10px 40px rgba(0,0,0,0.4); animation: fu 0.3s ease; margin-top: 10px; }
+#inp-sheet h3 { font-size:17px; font-weight:800; margin-bottom:15px; text-align:center; color: var(--bl); }
+.inp-btns { display:flex; gap:10px; margin-bottom:15px; }
+#inp-sheet input { width:100%; border:2px solid #E0E0E0; border-radius:1rem; padding:12px 14px; font-size:16px; font-family:inherit; margin-bottom:10px; display:block; }
+#inp-sheet input:focus { outline:none; border-color:var(--gn); background: #f9fff9; }
+
+#modal { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.95); z-index:200000; align-items:center; justify-content:center; }
+#modal.on { display:flex; }
+.mc2 { position: relative; width:100%; height:100%; display:flex; align-items:center; justify-content:center; flex-direction: column; }
+#vwr { flex: 1; width:100%; overflow:hidden; display:flex; align-items:center; justify-content:center; touch-action: none; cursor: grab; }
+#pvImg { max-width:100%; max-height:100%; object-fit:contain; transform-origin:center center; transition:transform 0.1s ease-out; }
+.modal-close-btn { position: absolute; top: 20px; right: 20px; width: 44px; height: 44px; background: rgba(255,255,255,0.2); border: none; border-radius: 50%; color: #fff; font-size: 24px; z-index: 200001; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+
+.res-hero{background:linear-gradient(135deg,#FFD93D,#FF9F43,#FF6B9D);background-size:200% 200%;animation:rb 4s ease infinite;padding:28px 20px;text-align:center;color:#fff;}
+.pgrid{padding:14px;display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.pgi{border-radius:1rem;overflow:hidden;background:#333;aspect-ratio:1;position:relative;cursor:pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+.pgi img{width:100%;height:100%;object-fit:cover;}
+.pg-x{position:absolute;top:8px;right:8px;background:rgba(220,30,30,0.9);color:#fff;border:none;border-radius:50%;width:30px;height:30px;font-size:16px;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:2;}
+.sa{padding:0 16px 16px;}
+.ib{background:linear-gradient(135deg,#E8F5E9,#E3F2FD);border-radius:1.2rem;padding:13px 14px;margin-bottom:12px;font-size:13px;color:#555;line-height:1.9;}
+.fw{background:#fff;border-radius:1.2rem;padding:13px 14px;box-shadow:0 4px 12px rgba(0,0,0,.07);margin-bottom:10px;}
+.fw label{display:block;font-size:13px;font-weight:800;color:#888;margin-bottom:5px;}
+.fw input{width:100%;border:2px solid #E0E0E0;border-radius:.75rem;padding:11px 12px;font-size:14px;font-family:inherit;}
+.fw input:focus{outline:none;border-color:var(--gn);}
+#stEl{margin-top:10px;font-size:14px;text-align:center;color:#888;min-height:20px;line-height:1.7;}
+
+.toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(120px);background:rgba(30,30,30,.95);color:#fff;border-radius:2rem;padding:13px 24px;font-size:14px;font-weight:700;z-index:110000;transition:transform .3s;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,.3);}
+.toast.show{transform:translateX(-50%) translateY(0);}
+
+#captureCanvas{display:none;}
+</style>
+</head>
+<body>
+
+<!-- 안전수칙 페이지 -->
+<div id="pg-safety" class="pg on">
+  <div class="hero-safety">
+    <span class="em">📸</span>
+    <h1 style="font-size:23px;font-weight:800;margin-bottom:6px;">재미있는 사진 찍기</h1>
+    <p style="font-size:14px;opacity:.92;">시작 전, 안전 수칙을 꼭 확인해요!</p>
+  </div>
+  <div style="padding:32px 16px 0;">
+    <div style="font-size:17px;font-weight:800;margin-bottom:14px;display:flex;align-items:center;gap:8px;"><i class="fa-solid fa-shield-halved" style="color:var(--gn);"></i> 사진 찍기 안전 수칙</div>
+    <div class="si"><div class="si-ic"><i class="fa-solid fa-eye" style="color:var(--bl);"></i></div><div><div class="si-lb">주변을 잘 살펴요</div><div class="si-ds">사진에 집중하다 부딪히거나 넘어질 수 있어요. 항상 주변을 확인하며 이동해요.</div></div></div>
+    <div class="si"><div class="si-ic"><i class="fa-solid fa-triangle-exclamation" style="color:var(--og);"></i></div><div><div class="si-lb">위험한 곳에 가지 않아요</div><div class="si-ds">의자·책상·돌 등 위험한 곳에 올라가지 않아요. 화단에 들어가거나 화단 턱·돌 위에 올라가지 않아요.</div></div></div>
+    <div class="si"><div class="si-ic"><i class="fa-solid fa-handshake" style="color:var(--gn);"></i></div><div><div class="si-lb">친구의 허락을 받아요</div><div class="si-ds">친구를 찍을 때는 반드시 동의를 받아요. 동의 없는 촬영은 예의에 어긋나요.</div></div></div>
+    <div class="si"><div class="si-ic"><i class="fa-solid fa-ban" style="color:var(--rd);"></i></div><div><div class="si-lb">사진을 무단으로 올리지 않아요</div><div class="si-ds">찍은 사진을 허락 없이 SNS에 올리면 안 돼요. 개인정보를 소중히 해요.</div></div></div>
+    <div class="si"><div class="si-ic"><i class="fa-solid fa-school" style="color:var(--pp);"></i></div><div><div class="si-lb">학교 규칙을 지켜요</div><div class="si-ds">선생님께서 정해준 장소 내에서만 촬영하고, 허락 없이 다른 장소로 가지 않아요.</div></div></div>
+  </div>
+  <div class="warn">
+    <h3><i class="fa-solid fa-circle-exclamation"></i> 모둠 활동 중지 경고!</h3>
+    <p>⛔ 친구 동의 없이 사진 찍기<br>⛔ 위험한 장소 탐방<br>⛔ 찍은 사진 무단 유포<br>⛔ 선생님의 정당한 지도 불응<br><br>→ 위 행동 적발 시 <strong>모둠 활동 즉시 중지!</strong></p>
+  </div>
+  <div style="padding:16px;">
+    <div class="ag-row"><input type="checkbox" id="agCk"><label for="agCk">안전 수칙을 모두 읽고 지키겠습니다!</label></div>
+    <button class="btn btn-gn" id="agBtn" onclick="goHome()" disabled>시작하기!</button>
+  </div>
+</div>
+
+<!-- 홈 메인 페이지 -->
+<div id="pg-home" class="pg">
+  <div class="hero-home">
+    <span class="cam">📷</span>
+    <h1 style="font-size:23px;font-weight:800;margin-bottom:5px;">재미있는 사진 찍기</h1>
+    <p style="font-size:14px;opacity:.92;">무엇을 할까요? 🎨</p>
+  </div>
+  <div class="mgrid">
+    <div class="mc c1" onclick="go('pg-practice')"><span class="me">🎯</span><h3>📚 사진<br>연습하기</h3></div>
+    <div class="mc c2" onclick="go('pg-mission')"><span class="me">🏆</span><h3>🌟 미션<br>도전하기</h3></div>
+    <div class="mc c3" onclick="go('pg-result')"><span class="me">🖼️</span><h3>📋 결과물<br>제출하기</h3></div>
+  </div>
+</div>
+
+<!-- 연습 페이지 -->
+<div id="pg-practice" class="pg">
+  <div class="nav">
+    <button class="nb" onclick="go('pg-home')"><i class="fa-solid fa-arrow-left"></i> 되돌리기</button>
+    <h2>📚 사진 연습하기</h2>
+    <button class="nb" onclick="go('pg-home')"><i class="fa-solid fa-house"></i></button>
+  </div>
+  <div class="hero-sub" style="background:linear-gradient(135deg,var(--yw),var(--og));">
+    <h1>6가지 촬영 방법!</h1><p>탭하면 팁 → 📸 버튼 → 3초 후 촬영!</p>
+  </div>
+  <div style="padding:32px 16px 0;">
+    <div class="pi"><div class="pi-hd" onclick="tipTog(this)"><div class="pi-em">⬆️</div><div class="pi-inf"><h3>위에서 찍기</h3><p>카메라를 아래로</p></div><div class="pi-bd" style="background:#FFD93D;color:#333;"><i class="fa-solid fa-lightbulb"></i> 팁</div></div><div class="pi-tip">💡 발판·계단 이용. 의자 위는 위험해요!</div><button class="pi-btn" style="background:linear-gradient(135deg,#FFD93D,#FF9F43);" onclick="openCam('위에서 찍기 📸',this)"><i class="fa-solid fa-camera"></i> 3초 후 촬영</button></div>
+    <div class="pi"><div class="pi-hd" onclick="tipTog(this)"><div class="pi-em">⬇️</div><div class="pi-inf"><h3>아래에서 찍기</h3><p>카메라를 위로</p></div><div class="pi-bd" style="background:#FF6B9D;color:#fff;"><i class="fa-solid fa-lightbulb"></i> 팁</div></div><div class="pi-tip">💡 바닥에 앉아 카메라를 위로!</div><button class="pi-btn" style="background:linear-gradient(135deg,#FF6B9D,#C77DFF);" onclick="openCam('아래에서 찍기 📸',this)"><i class="fa-solid fa-camera"></i> 3초 후 촬영</button></div>
+    <div class="pi"><div class="pi-hd" onclick="tipTog(this)"><div class="pi-em">🔍</div><div class="pi-inf"><h3>가까이서 찍기</h3><p>크게 자세히</p></div><div class="pi-bd" style="background:#26de81;color:#fff;"><i class="fa-solid fa-lightbulb"></i> 팁</div></div><div class="pi-tip">💡 10~30cm 거리에서!</div><button class="pi-btn" style="background:linear-gradient(135deg,#26de81,#4D96FF);" onclick="openCam('가까이서 찍기 📸',this)"><i class="fa-solid fa-camera"></i> 3초 후 촬영</button></div>
+    <div class="pi"><div class="pi-hd" onclick="tipTog(this)"><div class="pi-em">🌅</div><div class="pi-inf"><h3>멀리서 찍기</h3><p>넓은 배경과 함께</p></div><div class="pi-bd" style="background:#4D96FF;color:#fff;"><i class="fa-solid fa-lightbulb"></i> 팁</div></div><div class="pi-tip">💡 5m 이상 거리에서!</div><button class="pi-btn" style="background:linear-gradient(135deg,#4D96FF,#C77DFF);" onclick="openCam('멀리서 찍기 📸',this)"><i class="fa-solid fa-camera"></i> 3초 후 촬영</button></div>
+    <div class="pi"><div class="pi-hd" onclick="tipTog(this)"><div class="pi-em">😊</div><div class="pi-inf"><h3>앞에서 찍기</h3><p>정면 표정 담기</p></div><div class="pi-bd" style="background:#C77DFF;color:#fff;"><i class="fa-solid fa-lightbulb"></i> 팁</div></div><div class="pi-tip">💡 눈높이 맞추고 정면에서!</div><button class="pi-btn" style="background:linear-gradient(135deg,#C77DFF,#FF6B9D);" onclick="openCam('앞에서 찍기 📸',this)"><i class="fa-solid fa-camera"></i> 3초 후 촬영</button></div>
+    <div class="pi"><div class="pi-hd" onclick="tipTog(this)"><div class="pi-em">🚶</div><div class="pi-inf"><h3>뒤에서 찍기</h3><p>뒷모습의 분위기</p></div><div class="pi-bd" style="background:#FF9F43;color:#fff;"><i class="fa-solid fa-lightbulb"></i> 팁</div></div><div class="pi-tip">💡 뒷모습은 신비로운 느낌!</div><button class="pi-btn" style="background:linear-gradient(135deg,#FF9F43,#FF4757);" onclick="openCam('뒤에서 찍기 📸',this)"><i class="fa-solid fa-camera"></i> 3초 후 촬영</button></div>
+  </div>
+</div>
+
+<!-- 미션 페이지 -->
+<div id="pg-mission" class="pg">
+  <div class="nav">
+    <button class="nb" onclick="go('pg-home')"><i class="fa-solid fa-arrow-left"></i> 되돌리기</button>
+    <h2>🏆 미션 도전하기</h2>
+    <button class="nb" onclick="go('pg-home')"><i class="fa-solid fa-house"></i></button>
+  </div>
+  <div class="hero-sub" style="background:linear-gradient(135deg,var(--gn),var(--bl));">
+    <h1>인물 사진 미션!</h1><p>계획 세우고 → 📸 → 3초 후 촬영 🎯</p>
+  </div>
+  <div style="padding:32px 16px 0;">
+
+    <!-- 미션 1 -->
+    <div class="mcard m1">
+      <div class="mhd"><span class="mbadge">미션 1</span><h3>배경과 잘 어울리는 사진</h3><span style="font-size:26px;">🌅</span></div>
+      <div class="mbody">
+        <div class="mdesc">배경과 인물이 자연스럽게 어우러지도록 찍어봐요!</div>
+        <div class="plan">
+          <h4>📋 미션 1 계획</h4>
+          <div class="pf"><label>작품 제목</label><input type="text" id="m1t" placeholder="예: 봄날의 우리"></div>
+          <div class="pf"><label>작품 설명</label><textarea id="m1d" placeholder="어떻게 찍을지..."></textarea></div>
+          <div class="pf"><label>필요한 소품</label><input type="text" id="m1p" placeholder="예: 꽃, 모자"></div>
+          <div class="pf"><label>촬영 장소</label><input type="text" id="m1l" placeholder="예: 학교 화단"></div>
+        </div>
+        <button class="btn btn-yw" id="m1btn" onclick="openCam('미션1: 배경과 어울리는 사진 🌅',this)"><i class="fa-solid fa-camera"></i> 촬영 시작</button>
+      </div>
+    </div>
+
+    <!-- 미션 2 -->
+    <div class="mcard m2">
+      <div class="mhd"><span class="mbadge">미션 2</span><h3>원근감을 활용한 사진</h3><span style="font-size:26px;">📐</span></div>
+      <div class="mbody">
+        <div class="mdesc">원근감을 활용해 창의적인 사진을 찍어봐요!</div>
+        <div class="plan b">
+          <h4>📋 미션 2 계획</h4>
+          <div class="pf"><label>작품 제목</label><input type="text" id="m2t" placeholder="예: 건물을 손바닥 위에"></div>
+          <div class="pf"><label>작품 설명</label><textarea id="m2d" placeholder="어떻게 찍을지..."></textarea></div>
+          <div class="pf"><label>필요한 소품</label><input type="text" id="m2p" placeholder="예: 없음"></div>
+          <div class="pf"><label>촬영 장소</label><input type="text" id="m2l" placeholder="예: 운동장"></div>
+        </div>
+        <button class="btn btn-gn" id="m2btn" onclick="openCam('미션2: 원근감 활용 사진 📐',this)"><i class="fa-solid fa-camera"></i> 촬영 시작</button>
+      </div>
+    </div>
+
+    <!-- ★ 미션 3: 자유주제 (신규 추가) -->
+    <div class="mcard m3">
+      <div class="mhd"><span class="mbadge">미션 3</span><h3>나만의 자유주제 사진</h3><span style="font-size:26px;">✨</span></div>
+      <div class="mbody">
+        <div class="mdesc">아이디어를 마음껏 펼쳐봐요! 예시 주제를 눌러보거나 직접 만들어도 좋아요. 🌈</div>
+
+        <!-- 예시 주제 칩 -->
+        <div class="chip-label">💡 예시 주제 (탭해서 선택!)</div>
+        <div class="theme-chips">
+          <button class="chip" onclick="pickTheme(this,'그림자 사진 🌑')">🌑 그림자</button>
+          <button class="chip" onclick="pickTheme(this,'손으로 모양 만들기 🤲')">🤲 손 모양</button>
+          <button class="chip" onclick="pickTheme(this,'우정 사진 💛')">💛 우정 사진</button>
+          <button class="chip" onclick="pickTheme(this,'반사·거울 사진 🪞')">🪞 반사·거울</button>
+          <button class="chip" onclick="pickTheme(this,'색깔 찾기 사진 🎨')">🎨 색깔 찾기</button>
+          <button class="chip" onclick="pickTheme(this,'재미있는 표정 사진 😜')">😜 재미난 표정</button>
+        </div>
+
+        <div class="plan c">
+          <h4>📋 미션 3 계획</h4>
+          <div class="pf"><label>선택한 주제 (또는 직접 입력)</label><input type="text" id="m3theme" placeholder="예: 그림자 사진"></div>
+          <div class="pf"><label>작품 제목</label><input type="text" id="m3t" placeholder="예: 우리들의 그림자 댄스"></div>
+          <div class="pf"><label>작품 설명</label><textarea id="m3d" placeholder="어떻게 찍을지 설명해봐요..."></textarea></div>
+          <div class="pf"><label>필요한 소품</label><input type="text" id="m3p" placeholder="예: 없음"></div>
+          <div class="pf"><label>촬영 장소</label><input type="text" id="m3l" placeholder="예: 복도, 운동장"></div>
+        </div>
+        <button class="btn btn-pp" id="m3btn" onclick="openCamM3(this)"><i class="fa-solid fa-camera"></i> 촬영 시작</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- 카메라 UI -->
+<div id="cam">
+  <div id="cam-header">
+    <button class="cam-nb" onclick="closeCam()"><i class="fa-solid fa-arrow-left"></i> 되돌리기</button>
+    <button class="cam-nb" onclick="goHomeFromCam()"><i class="fa-solid fa-house"></i> 홈</button>
+    <button class="cam-nb" onclick="toggleFullscreen()" id="fsBtn"><i class="fa-solid fa-expand"></i> 전체화면</button>
+    <span id="camTitle" class="cam-title-txt" style="display:none;">사진 찍기</span>
+  </div>
+  <div id="cam-body">
+    <video id="videoMain" class="v-tag" autoplay playsinline muted></video>
+    <div class="cam-grid-ov"></div>
+    <div class="cd-ov" id="cdOv"><div class="cd-n" id="cdN">3</div></div>
+    <div class="zoom-row" id="zoomRow">
+      <button class="zb on" onclick="setZoom(1,this)">1x</button>
+      <button class="zb" onclick="setZoom(2,this)">2x</button>
+      <button class="zb" onclick="setZoom(5,this)">5x</button>
+      <button class="zb" onclick="setZoom(10,this)">10x</button>
+    </div>
+  </div>
+  <div id="cam-footer">
+    <button class="cam-btn-icon" id="galBtn" onclick="showLast()">
+      <img id="lastTh" alt=""><span id="galIco"><i class="fa-solid fa-images"></i></span>
+    </button>
+    <button class="shutter" id="shutBtn" onclick="startCD()"><i class="fa-solid fa-camera"></i></button>
+    <button class="cam-btn-icon" onclick="flipCam()"><i class="fa-solid fa-rotate"></i></button>
+  </div>
+  <canvas id="captureCanvas"></canvas>
+</div>
+
+<!-- 입력창 -->
+<div id="inp-wrap">
+  <div id="inp-sheet">
+    <h3>📝 사진 정보 입력</h3>
+    <div class="inp-btns">
+      <button class="btn btn-rd btn-sm" onclick="discardPhoto()" style="flex:1;"><i class="fa-solid fa-trash"></i> 버리기</button>
+      <button class="btn btn-gn btn-sm" onclick="savePhoto()" style="flex:1.8;"><i class="fa-solid fa-floppy-disk"></i> 저장하기</button>
+    </div>
+    <input type="text" id="inpTitle" placeholder="사진 제목을 입력하세요">
+    <input type="text" id="inpPlace" placeholder="촬영 장소를 입력하세요">
+  </div>
+</div>
+
+<!-- 뷰어 모달 -->
+<div id="modal">
+  <button class="modal-close-btn" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+  <div class="mc2">
+    <div id="vwr"><img id="pvImg" src="" alt=""></div>
+  </div>
+</div>
+
+<!-- 결과물 제출 페이지 -->
+<div id="pg-result" class="pg">
+  <div class="nav">
+    <button class="nb" onclick="go('pg-home')"><i class="fa-solid fa-arrow-left"></i> 되돌리기</button>
+    <h2>📋 결과물 제출하기</h2>
+    <button class="nb" onclick="go('pg-home')"><i class="fa-solid fa-house"></i></button>
+  </div>
+  <div class="res-hero">
+    <div style="font-size:54px;margin-bottom:8px;">🎉</div>
+    <h1 style="font-size:21px;font-weight:800;margin-bottom:5px;">찍은 사진 모아보기!</h1>
+    <p id="pcnt" style="font-size:14px;">아직 사진이 없어요.</p>
+  </div>
+  <div class="pgrid" id="pgrid"></div>
+  <div class="sa">
+    <div class="fw"><label>모둠 이름</label><input type="text" id="grpNm" placeholder="예: 1모둠"></div>
+    <div class="fw"><label>모둠원 이름</label><input type="text" id="stuNm" placeholder="예: 홍길동, 김철수"></div>
+    <button class="btn btn-bl" id="subBtn" onclick="submitAll()"><i class="fa-solid fa-paper-plane"></i> 선생님께 제출하기!</button>
+    <div id="stEl"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var GAS = 'https://script.google.com/macros/s/AKfycbylbhG9pr2gTLrzqZR_OvoAbmetSJjlBUgPOwvlFAsJpr9peyGdoUIqJjgPfAIZvLOx6Q/exec';
+var stream = null, facing = 'environment', cdTimer = null;
+var pendingData = null, pendingIsLand = false;
+var camMode = '', callerBtn = null, curZoom = 1;
+var photos = [];
+try { 
+  var saved = localStorage.getItem('photos');
+  if(saved) photos = JSON.parse(saved);
+} catch(e){ photos = []; }
+
+let startDist = 0, initialZoom = 1;
+let modalZoom = 1;
+
+// ═══════════════════════════════
+// 자유주제 칩 선택
+// ═══════════════════════════════
+function pickTheme(el, theme) {
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('sel'));
+  el.classList.add('sel');
+  document.getElementById('m3theme').value = theme;
+}
+
+// 미션3 촬영 시작 (주제 자동 반영)
+function openCamM3(btn) {
+  var theme = document.getElementById('m3theme').value.trim() || '자유주제';
+  openCam('미션3: ' + theme + ' ✨', btn);
+}
+
+// ═══════════════════════════════
+// 기본 화면 전환 로직
+// ═══════════════════════════════
+document.getElementById('agCk').addEventListener('change', function(){ document.getElementById('agBtn').disabled = !this.checked; });
+function goHome(){ if(!document.getElementById('agCk').checked) return; go('pg-home'); }
+
+function go(id){
+  document.querySelectorAll('.pg').forEach(p => p.classList.remove('on'));
+  const target = document.getElementById(id);
+  if(target) target.classList.add('on');
+  if(id==='pg-result') renderResult();
+  window.scrollTo(0,0);
+}
+function tipTog(hd){
+  var t = hd.parentElement.querySelector('.pi-tip');
+  if(t) t.style.display = t.style.display==='block' ? 'none' : 'block';
+}
+
+async function toggleFullscreen() {
+  if (!document.fullscreenElement) {
+    try {
+      if (document.documentElement.requestFullscreen) await document.documentElement.requestFullscreen();
+      else if (document.documentElement.webkitRequestFullscreen) await document.documentElement.webkitRequestFullscreen();
+      document.getElementById('fsBtn').innerHTML = '<i class="fa-solid fa-compress"></i> 화면축소';
+    } catch (err) { toast('전체화면 전환 실패'); }
+  } else {
+    if (document.exitFullscreen) document.exitFullscreen();
+    else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+    document.getElementById('fsBtn').innerHTML = '<i class="fa-solid fa-expand"></i> 전체화면';
+  }
+}
+
+// ═══════════════════════════════
+// 카메라 제어
+// ═══════════════════════════════
+async function openCam(title, btn){
+  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){ alert('카메라를 지원하지 않습니다.'); return; }
+  if(btn){ btn.disabled = true; callerBtn = btn; }
+  camMode = title;
+  document.getElementById('camTitle').textContent = title;
+  curZoom = 1;
+  applyZoom(1);
+  document.getElementById('cam').classList.add('on');
+
+  try {
+    if (!document.fullscreenElement) {
+        if (document.documentElement.requestFullscreen) await document.documentElement.requestFullscreen();
+        else if (document.documentElement.webkitRequestFullscreen) await document.documentElement.webkitRequestFullscreen();
+        document.getElementById('fsBtn').innerHTML = '<i class="fa-solid fa-compress"></i> 화면축소';
+    }
+  } catch(e) {}
+
+  const body = document.getElementById('cam-body');
+  body.addEventListener('touchstart', e => {
+    if(e.touches.length === 2){
+      startDist = Math.hypot(e.touches[0].pageX - e.touches[1].pageX, e.touches[0].pageY - e.touches[1].pageY);
+      initialZoom = curZoom;
+    }
+  }, {passive: false});
+  body.addEventListener('touchmove', e => {
+    if(e.touches.length === 2){
+      e.preventDefault();
+      let dist = Math.hypot(e.touches[0].pageX - e.touches[1].pageX, e.touches[0].pageY - e.touches[1].pageY);
+      let zoom = initialZoom * (dist / startDist);
+      applyZoom(Math.min(Math.max(zoom, 1), 10));
+    }
+  }, {passive: false});
+
+  await startCam();
+}
+
+async function startCam(){
+  try{
+    if(stream){ stream.getTracks().forEach(t => t.stop()); }
+    var constraints = {
+      video:{facingMode:facing, width:{ideal:2560}, height:{ideal:1440}},
+      audio:false
+    };
+    stream = await navigator.mediaDevices.getUserMedia(constraints);
+    var vid = document.getElementById('videoMain');
+    vid.srcObject = stream;
+    vid.onloadedmetadata = () => vid.play();
+  }catch(e){ alert('카메라 시작 불가'); stopCamAndExit(); go('pg-mission'); }
+}
+
+function stopCamAndExit() {
+  if(stream){ stream.getTracks().forEach(t => t.stop()); stream=null; }
+  document.getElementById('cam').classList.remove('on');
+  if(callerBtn) callerBtn.disabled = false;
+  if (document.fullscreenElement) {
+      if (document.exitFullscreen) document.exitFullscreen();
+      else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+  }
+}
+
+function closeCam(){
+  stopCamAndExit();
+  go('pg-mission');
+}
+
+function goHomeFromCam() {
+  stopCamAndExit();
+  go('pg-home');
+}
+
+function applyZoom(z){
+  curZoom = z;
+  document.getElementById('videoMain').style.transform = `scale(${z})`;
+  document.querySelectorAll('.zb').forEach(b => {
+    b.classList.toggle('on', Math.abs(parseFloat(b.textContent) - z) < 0.1);
+  });
+}
+function setZoom(z, btn){ applyZoom(z); }
+function flipCam(){ facing = facing === 'environment' ? 'user' : 'environment'; startCam(); }
+
+// ═══════════════════════════════
+// 촬영 로직
+// ═══════════════════════════════
+function playShutter(){
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const sr = ctx.sampleRate, now = ctx.currentTime;
+    const mkBuf = (dur, fn) => { 
+      const b = ctx.createBuffer(1, Math.floor(sr * dur), sr); 
+      fn(b.getChannelData(0), sr); return b; 
+    };
+    const b1 = mkBuf(0.08, (d, sr) => {
+      for (let i = 0; i < d.length; i++) {
+        let t = i / sr, e = i < d.length * 0.1 ? (i / (d.length * 0.1)) : Math.exp(-(t - 0.008) * 15);
+        d[i] = (Math.sin(2 * Math.PI * 7000 * t) * 0.5 + Math.sin(2 * Math.PI * 5000 * t) * 0.3) * e * 2.5;
+      }
+    });
+    const s1 = ctx.createBufferSource(); s1.buffer = b1;
+    s1.connect(ctx.destination); s1.start(now);
+  } catch(e) {}
+}
+
+function startCD(){
+  if(cdTimer) return;
+  document.getElementById('shutBtn').disabled = true;
+  var cnt = 3;
+  var ov = document.getElementById('cdOv'), nm = document.getElementById('cdN');
+  function show(n){
+    nm.textContent = n;
+    ov.classList.add('on');
+    nm.style.animation = 'none';
+    void nm.offsetWidth; 
+    nm.style.animation = 'cd 1s ease forwards';
+  }
+  show(cnt);
+  cdTimer = setInterval(() => {
+    cnt--;
+    if(cnt <= 0){
+      clearInterval(cdTimer); cdTimer = null;
+      ov.classList.remove('on');
+      takePhoto();
+      document.getElementById('shutBtn').disabled = false;
+    } else { show(cnt); }
+  }, 1000);
+}
+
+function takePhoto(){
+  var vid = document.getElementById('videoMain');
+  if(vid.readyState < 2){ toast('준비 중...'); return; }
+  playShutter();
+  var isLand = window.innerWidth > window.innerHeight;
+  var vidW = vid.videoWidth, vidH = vid.videoHeight;
+  var canvas = document.getElementById('captureCanvas');
+  var ctx = canvas.getContext('2d');
+  var drawW = isLand ? Math.max(vidW, vidH) : Math.min(vidW, vidH);
+  var drawH = isLand ? Math.min(vidW, vidH) : Math.max(vidW, vidH);
+  const limit = 2048;
+  if(drawW > limit || drawH > limit){ let r = Math.min(limit/drawW, limit/drawH); drawW *= r; drawH *= r; }
+  canvas.width = drawW; canvas.height = drawH;
+  ctx.save();
+  if((isLand && vid.videoWidth < vid.videoHeight) || (!isLand && vid.videoWidth > vid.videoHeight)){
+    ctx.translate(canvas.width/2, canvas.height/2); ctx.rotate(90 * Math.PI / 180);
+    if(facing==='user') ctx.scale(-1,1);
+    ctx.drawImage(vid, -drawH/2, -drawW/2, drawH, drawW);
+  } else {
+    if(facing==='user'){ ctx.translate(drawW,0); ctx.scale(-1,1); }
+    ctx.drawImage(vid, 0, 0, drawW, drawH);
+  }
+  ctx.restore();
+  const flash = document.createElement('div');
+  flash.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:#fff;z-index:200000;opacity:0.8;';
+  document.body.appendChild(flash);
+  setTimeout(() => { flash.style.transition='opacity 0.2s'; flash.style.opacity='0'; setTimeout(()=>flash.remove(), 200); }, 50);
+  resizeImage(canvas.toDataURL('image/jpeg', 0.95), 1600, data => {
+    pendingData = data;
+    pendingIsLand = isLand;
+    document.getElementById('inpTitle').value = '';
+    document.getElementById('inpPlace').value = '';
+    document.getElementById('inp-wrap').classList.add('on');
+  });
+}
+
+function resizeImage(data, max, cb){
+  var img = new Image();
+  img.onload = () => {
+    var w = img.width, h = img.height;
+    if(w>max||h>max){ if(w>h){ h*=max/w; w=max; } else { w*=max/h; h=max; } }
+    var c = document.createElement('canvas'); c.width=w; c.height=h;
+    var cx = c.getContext('2d'); cx.imageSmoothingQuality='high'; cx.drawImage(img,0,0,w,h);
+    cb(c.toDataURL('image/jpeg', 0.9));
+  };
+  img.src = data;
+}
+
+function savePhoto(){
+  var t = document.getElementById('inpTitle').value.trim();
+  var p = document.getElementById('inpPlace').value.trim();
+  if(!t || !p){ toast('정보를 모두 입력하세요!'); return; }
+  photos.push({ id: Date.now(), data: pendingData, title: t, place: p, timestamp: new Date().toLocaleString('ko-KR'), mode: camMode, isLand: pendingIsLand });
+  localStorage.setItem('photos', JSON.stringify(photos));
+  const lastImg = document.getElementById('lastTh');
+  lastImg.src = pendingData;
+  lastImg.style.display = 'block';
+  document.getElementById('galIco').style.display = 'none';
+  document.getElementById('inp-wrap').classList.remove('on');
+  toast('✅ 저장되었습니다!');
+}
+function discardPhoto(){ document.getElementById('inp-wrap').classList.remove('on'); toast('🗑️ 버렸습니다.'); }
+
+// ═══════════════════════════════
+// 결과 확인 및 제출
+// ═══════════════════════════════
+function renderResult(){
+  var g = document.getElementById('pgrid');
+  document.getElementById('pcnt').textContent = photos.length ? `총 ${photos.length}장 찍었어요! 🎉` : '아직 사진이 없어요.';
+  g.innerHTML = photos.length ? '' : '<div style="grid-column:1/-1;text-align:center;padding:40px;color:#aaa;">사진이 없습니다. 📸</div>';
+  photos.forEach(p => {
+    var d = document.createElement('div'); d.className='pgi';
+    d.innerHTML = `<img src="${p.data}"><button class="pg-x" onclick="delPh(${p.id},event)">✕</button>`;
+    d.onclick = () => openModal(p);
+    g.appendChild(d);
+  });
+}
+
+function delPh(id, e){
+  e.stopPropagation();
+  if(!confirm('삭제할까요?')) return;
+  photos = photos.filter(p => p.id !== id);
+  localStorage.setItem('photos', JSON.stringify(photos));
+  renderResult();
+}
+
+// 미션 3 계획서 데이터도 plan에 포함
+async function submitAll(){
+  var g = document.getElementById('grpNm').value.trim();
+  var s = document.getElementById('stuNm').value.trim();
+  if(!photos.length || !g || !s){ toast('정보를 모두 입력하세요!'); return; }
+  var btn = document.getElementById('subBtn');
+  var st = document.getElementById('stEl');
+  btn.disabled = true;
+  st.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> 전송 중...';
+
+  var plan = {
+    m1Title: document.getElementById('m1t').value.trim() || '-',
+    m1Desc:  document.getElementById('m1d').value.trim() || '-',
+    m1Props: document.getElementById('m1p').value.trim() || '-',
+    m1Place: document.getElementById('m1l').value.trim() || '-',
+    m2Title: document.getElementById('m2t').value.trim() || '-',
+    m2Desc:  document.getElementById('m2d').value.trim() || '-',
+    m2Props: document.getElementById('m2p').value.trim() || '-',
+    m2Place: document.getElementById('m2l').value.trim() || '-',
+    m3Theme: document.getElementById('m3theme').value.trim() || '-',
+    m3Title: document.getElementById('m3t').value.trim() || '-',
+    m3Desc:  document.getElementById('m3d').value.trim() || '-',
+    m3Props: document.getElementById('m3p').value.trim() || '-',
+    m3Place: document.getElementById('m3l').value.trim() || '-',
+  };
+
+  try {
+    await fetch(GAS, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ group: g, student: s, photos: photos, plan: plan, submittedAt: new Date().toISOString() }) });
+    st.innerHTML = '✅ 제출 완료! 사진은 목록에 그대로 남아있습니다. 📝';
+    toast('🎉 전송 성공!');
+  } catch(e){
+    st.innerHTML = '❌ 실패! 인터넷 연결 확인';
+  } finally { btn.disabled = false; }
+}
+
+function openModal(p){
+  const img = document.getElementById('pvImg');
+  img.src = p.data;
+  modalZoom = 1;
+  applyModalZoom();
+  document.getElementById('modal').classList.add('on');
+}
+
+function closeModal(){ document.getElementById('modal').classList.remove('on'); }
+
+function applyModalZoom(){
+  const img = document.getElementById('pvImg');
+  img.style.transform = `scale(${modalZoom})`;
+}
+
+(function initModalZoom() {
+  const vwr = document.getElementById('vwr');
+  let lastTap = 0;
+  vwr.addEventListener('touchstart', e => {
+    if(e.touches.length === 2){
+      startDist = Math.hypot(e.touches[0].pageX - e.touches[1].pageX, e.touches[0].pageY - e.touches[1].pageY);
+      initialZoom = modalZoom;
+    }
+  }, {passive: false});
+  vwr.addEventListener('touchmove', e => {
+    if(e.touches.length === 2){
+      e.preventDefault();
+      let dist = Math.hypot(e.touches[0].pageX - e.touches[1].pageX, e.touches[0].pageY - e.touches[1].pageY);
+      let zoom = initialZoom * (dist / startDist);
+      modalZoom = Math.min(Math.max(zoom, 1), 5);
+      applyModalZoom();
+    }
+  }, {passive: false});
+  vwr.addEventListener('touchend', e => {
+    let now = Date.now();
+    if (now - lastTap < 300) {
+      modalZoom = (modalZoom > 1) ? 1 : 2.5;
+      applyModalZoom();
+    }
+    lastTap = now;
+  });
+})();
+
+function toast(m){ var t = document.getElementById('toast'); t.textContent=m; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'), 1500); }
+function showLast(){ if(photos.length) openModal(photos[photos.length-1]); }
+</script>
+</body>
+</html>
